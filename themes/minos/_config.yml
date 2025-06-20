@@ -24,6 +24,7 @@ article:
   date_format: relative
 
 # Navigation bar menu links.
+# 改为 `关于: /about` 冒号后接source目录
 menu:
   Archives: /archives
   Lifestyle: /categories/LifeStyle
