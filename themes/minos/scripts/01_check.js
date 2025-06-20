@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const logger = require('hexo-log')();
+const logger = hexo.log;
 
 logger.info(`=======================================
 ███╗   ███╗ ██╗ ███╗   ██╗  ██████╗  ███████╗
