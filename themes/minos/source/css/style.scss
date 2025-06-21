@@ -1,9 +1,15 @@
-$family-serif: "Ovo", "Georgia", "STZhongsong", "Microsoft YaHei", serif;
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+
+$family-serif: 'Noto Serif SC', 'STZhongsong', 'Ovo', 'Georgia', 'Microsoft YaHei', serif;
 $family-mono: "Source Code Pro", monospace, "Microsoft YaHei";
 $border-color: #dbdbdb;
 
 body, button, input, select, textarea {
     font-family: $family-serif;
+}
+
+body {
+  font-family: 'Noto Serif SC', 'STZhongsong', 'Microsoft YaHei', serif;
 }
 
 
@@ -632,3 +638,9 @@ figure.highlight {
 }
 
 @import "insight";
+
+/* 导航栏归档和关于加粗显示 */
+.navbar-item[href*="/archives"],
+.navbar-item[href*="/about"] {
+  font-weight: bold;
+}
