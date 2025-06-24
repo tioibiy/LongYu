@@ -35,6 +35,7 @@ menu:
 # Search plugin settings.
 search:
   type: insight
+  path: content.json
 
 # Navigation bar toc settings
 toc: true

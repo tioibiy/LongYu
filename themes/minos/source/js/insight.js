@@ -189,6 +189,21 @@
     }
 
     $.getJSON(CONFIG.CONTENT_URL, function (json) {
+        // 如果 json 是数组，则包裹为 { posts: json }
+        if (Array.isArray(json)) {
+            json = {
+                posts: json.map(function(item) {
+                    return {
+                        title: item.title,
+                        link: item.url,
+                        text: item.content
+                    };
+                }),
+                pages: [],
+                tags: [],
+                categories: []
+            };
+        }
         if (location.hash.trim() === '#ins-search') {
             $main.addClass('show');
         }
