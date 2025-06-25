@@ -15,16 +15,30 @@
             .append($('<header>').addClass('ins-section-header').text(title));
     }
 
-    function searchItem (icon, title, slug, preview, url) {
+    function highlightKeyword(text, keywords) {
+        if (!keywords) return text;
+        var keywordArray = keywords.split(' ').filter(function (k) { return !!k; });
+        keywordArray.forEach(function (kw) {
+            if (kw) {
+                var reg = new RegExp(kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                text = text.replace(reg, function(match) {
+                    return '<span class="ins-highlight">' + match + '</span>';
+                });
+            }
+        });
+        return text;
+    }
+
+    function searchItem (icon, title, slug, preview, url, keywords) {
         return $('<div>').addClass('ins-selectable').addClass('ins-search-item')
             .append($('<header>').append($('<i>').addClass('fa').addClass('fa-' + icon))
-                .append($('<span>').addClass('ins-title').text(title != null && title !== '' ? title : CONFIG.TRANSLATION['UNTITLED']))
+                .append($('<span>').addClass('ins-title').html(highlightKeyword(title, keywords) || CONFIG.TRANSLATION['UNTITLED']))
                 .append(slug ? $('<span>').addClass('ins-slug').text(slug) : null))
-            .append(preview ? $('<p>').addClass('ins-search-preview').text(preview) : null)
+            .append(preview ? $('<p>').addClass('ins-search-preview').html(highlightKeyword(preview, keywords)) : null)
             .attr('data-url', url);
     }
 
-    function sectionFactory (type, array) {
+    function sectionFactory (type, array, keywords) {
         var sectionTitle;
         var $searchItems;
         if (array.length === 0) return null;
@@ -33,14 +47,13 @@
             case 'POSTS':
             case 'PAGES':
                 $searchItems = array.map(function (item) {
-                    // Use config.root instead of permalink to fix url issue
-                    return searchItem('file', item.title, null, item.text.slice(0, 150), item.link);
+                    return searchItem('file', item.title, null, item.text ? item.text.slice(0, 150) : '', item.link, keywords);
                 });
                 break;
             case 'CATEGORIES':
             case 'TAGS':
                 $searchItems = array.map(function (item) {
-                    return searchItem(type === 'CATEGORIES' ? 'folder' : 'tag', item.name, item.slug, null, item.link);
+                    return searchItem(type === 'CATEGORIES' ? 'folder' : 'tag', item.name, item.slug, null, item.link, keywords);
                 });
                 break;
             default:
@@ -140,17 +153,17 @@
         var tags = json.tags;
         var categories = json.categories;
         return {
-            posts: posts.filter(FILTERS.POST).sort(function (a, b) { return WEIGHTS.POST(b) - WEIGHTS.POST(a); }).slice(0, 5),
-            pages: pages.filter(FILTERS.PAGE).sort(function (a, b) { return WEIGHTS.PAGE(b) - WEIGHTS.PAGE(a); }).slice(0, 5),
-            categories: categories.filter(FILTERS.CATEGORY).sort(function (a, b) { return WEIGHTS.CATEGORY(b) - WEIGHTS.CATEGORY(a); }).slice(0, 5),
-            tags: tags.filter(FILTERS.TAG).sort(function (a, b) { return WEIGHTS.TAG(b) - WEIGHTS.TAG(a); }).slice(0, 5)
+            posts: posts.filter(FILTERS.POST).sort(function (a, b) { return WEIGHTS.POST(b) - WEIGHTS.POST(a); }),
+            pages: pages.filter(FILTERS.PAGE).sort(function (a, b) { return WEIGHTS.PAGE(b) - WEIGHTS.PAGE(a); }),
+            categories: categories.filter(FILTERS.CATEGORY).sort(function (a, b) { return WEIGHTS.CATEGORY(b) - WEIGHTS.CATEGORY(a); }),
+            tags: tags.filter(FILTERS.TAG).sort(function (a, b) { return WEIGHTS.TAG(b) - WEIGHTS.TAG(a); })
         };
     }
 
-    function searchResultToDOM (searchResult) {
+    function searchResultToDOM (searchResult, keywords) {
         $container.empty();
         for (var key in searchResult) {
-            $container.append(sectionFactory(key.toUpperCase(), searchResult[key]));
+            $container.append(sectionFactory(key.toUpperCase(), searchResult[key], keywords));
         }
     }
 
@@ -209,7 +222,7 @@
         }
         $input.on('input', function () {
             var keywords = $(this).val();
-            searchResultToDOM(search(json, keywords));
+            searchResultToDOM(search(json, keywords), keywords);
         });
         $input.trigger('input');
     });
@@ -248,3 +261,6 @@
         touch = false;
     });
 })(jQuery, window.INSIGHT_CONFIG);
+
+// 添加高亮样式（可放到你的CSS文件中）
+// .ins-highlight { background: yellow; color: #d32f2f; font-weight: bold; }
