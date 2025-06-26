@@ -8,20 +8,77 @@
             justify-content: center;
             align-items: center;
             gap: 60px;
+            margin-bottom: 60px;
         }
         .bg-images img {
-            width: 320px;
+            width: 450px;
             height: auto;
             display: block;
+        }
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .fade-in-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in-up.hide {
+            opacity: 0;
+            transform: translateY(80px);
+        }
+        .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto 0 auto;
+            padding: 12px 48px;
+            border: 2px solid #000;
+            border-radius: 0; /* 改为直角 */
+            background: transparent;
+            color: #000;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            height: 60px;
+            box-sizing: border-box;
+            width: 100%; /* 宽度占满父容器 */
+            max-width: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="bg-images">
-            <img src="images/聋语_1.svg">
+            <img src="images/聋语_1.svg" width="500px">
         </div>
-        <a href="/catalog/">进入目录</a>
+        
+        <div class="bg-images fade-in-up hide" id="coverBlock" style="margin-left: -80px;">
+            <img src="images/cover.png">
+            关于聋语：
+        </div>
+        <div style="display: flex; justify-content: center; gap: 32px; margin-top: 30px;">
+            <a href="/archives/index.html" class="button">聋语启动！</a>
+            <a href="#" class="button">了解更多</a>
+        </div>
+        
     </div> 
+    <script>
+        function revealOnScroll() {
+            var block = document.getElementById('coverBlock');
+            var rect = block.getBoundingClientRect();
+            var windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            block.classList.remove('show', 'hide');
+            if(rect.top < windowHeight -300) {
+                block.classList.add('show');
+            } else {
+                block.classList.add('hide');
+            }
+        }
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('DOMContentLoaded', revealOnScroll);
+    </script>
 </body>
 </html>
