@@ -641,6 +641,24 @@ figure.highlight {
 
 /* 导航栏归档和关于加粗显示 */
 .navbar-item[href*="/archives"],
-.navbar-item[href*="/about"] {
+.navbar-item[href*="/about"],
+.navbar-item[href*="/games"] {
   font-weight: bold;
+}
+
+/* 调整正文字间距 */
+// .post-content, .entry-content, .article-entry {
+//   letter-spacing: 0.08em; /* 可根据需要调整数值 */
+// }
+
+/* 调整有序列表项之间的垂直间距 */
+.post-content ol, .entry-content ol, .article-entry ol {
+  margin-bottom: 1.2em; /* 列表整体下方间距 */
+}
+.post-content ol li, .entry-content ol li, .article-entry ol li {
+  margin-bottom: 2em; /* 列表项之间的间距 */
+}
+
+.post-content, .entry-content, .article-entry {
+  line-height: 1.6; // 你可以根据需要调整为 1.6、1.8、2 等
 }
