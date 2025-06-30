@@ -39,7 +39,7 @@ search:
   path: content.json
 
 # Navigation bar toc settings
-toc: true
+toc: false
 
 # Share plugin settings.
 share:
