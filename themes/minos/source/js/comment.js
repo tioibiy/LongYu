@@ -60,15 +60,15 @@ function submitOiWikiComment(blockId) {
 
 document.addEventListener('DOMContentLoaded', function () {
   const blocks = document.querySelectorAll('article ol > li');
-  const drawer = document.getElementById('twikoo-comment-drawer');
-  const drawerContent = drawer.querySelector('.twikoo-drawer-content');
-  const drawerClose = drawer.querySelector('.twikoo-drawer-close');
+  const drawer = document.getElementById('comment-drawer');
+  const drawerContent = drawer.querySelector('.drawer-content');
+  const drawerClose = drawer.querySelector('.drawer-close');
 
   blocks.forEach((block, idx) => {
     const blockId = 'block-ol-' + idx;
-    block.setAttribute('data-twikoo-block', blockId);
+    block.setAttribute('data-block', blockId);
     const btn = document.createElement('button');
-    btn.className = 'twikoo-comment-btn';
+    btn.className = 'comment-btn';
     btn.title = '评论';
     btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="iconify-icon iconify-inline" width="1em" height="1em" viewBox="0 0 24 24"><path d="M11 11v2q0 .425.288.713T12 14t.713-.288T13 13v-2h2q.425 0 .713-.288T16 10t-.288-.712T15 9h-2V7q0-.425-.288-.712T12 6t-.712.288T11 7v2H9q-.425 0-.712.288T8 10t.288.713T9 11zm-5 7l-2.3 2.3q-.475.475-1.088.213T2 19.575V4q0-.825.588-1.412T4 2h16q.825 0 1.413.588T22 4v12q0 .825-.587 1.413T20 18zm-.85-2H20V4H4v13.125zM4 16V4z" fill="currentColor"/></svg>`;
     btn.onclick = function (e) {
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   document.addEventListener('click', function(e) {
-    if (drawer.classList.contains('active') && !drawer.contains(e.target) && !e.target.classList.contains('twikoo-comment-btn')) {
+    if (drawer.classList.contains('active') && !drawer.contains(e.target) && !e.target.classList.contains('comment-btn')) {
       drawer.classList.remove('active');
     }
   });

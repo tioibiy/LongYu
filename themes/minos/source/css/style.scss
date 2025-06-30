@@ -1,6 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap');
+@font-face {
+  font-family: 'SourceHanSerifSC-Local';
+  src: url('/fonts/SourceHanSerifSC-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SourceHanSerifSC-Local';
+  src: url('/fonts/SourceHanSerifSC-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
-$family-serif: 'Noto Serif SC', 'STZhongsong', 'Ovo', 'Georgia', 'Microsoft YaHei', serif;
+$family-serif: 'SourceHanSerifSC-Local', 'Source Han Serif SC', 'Noto Serif SC', 'STZhongsong', 'Ovo', 'Georgia', 'Microsoft YaHei', serif;
 $family-mono: "Source Code Pro", monospace, "Microsoft YaHei";
 $border-color: #dbdbdb;
 
@@ -9,7 +22,7 @@ body, button, input, select, textarea {
 }
 
 body {
-  font-family: 'Noto Serif SC', 'STZhongsong', 'Microsoft YaHei', serif;
+  font-family: 'SourceHanSerifSC-Local', 'Source Han Serif SC', 'Noto Serif SC', 'STZhongsong', 'Microsoft YaHei', serif;
 }
 
 
