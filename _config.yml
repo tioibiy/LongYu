@@ -101,34 +101,13 @@ theme: minos
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
-deploy:
-  type: git
-  repo: https://github.com/tioibiy/LongYu-pages.git
-  branch: main
+# deploy:
+#   type: git
+#   repo: https://github.com/tioibiy/LongYu-pages.git
+#   branch: main
 
 # 搜索
 search:
   path: content.json
   field: post
   content: true
-  # format: json
-  # meta: true
-  # pages: true
-  # posts: true
-
-# jsonContent:
-#   meta: false
-#   pages: false
-#   posts:
-#     title: true
-#     date: true
-#     path: true
-#     text: true
-#     tags: true
-#     categories: true
-#   tags: true
-#   categories: true
-
-# 评论
-twikoo:
-  requiredFields: []
