@@ -128,3 +128,7 @@ search:
 #     categories: true
 #   tags: true
 #   categories: true
+
+# 评论
+twikoo:
+  requiredFields: []
