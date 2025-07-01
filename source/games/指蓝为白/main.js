@@ -8,6 +8,8 @@ let blocks=[];
 let pad_color=0;
 let pts=0;
 let end=false;
+let alerted=false;
+let last_press=0;
 function getRandomInt(max){
     return Math.floor(Math.random()*max);
 }
@@ -29,18 +31,21 @@ function blockFall(){
 function drawText(){
     ctx.font="15px Arial";
     ctx.fillStyle="#000000";
-    ctx.fillText("D",20,540);
-    ctx.fillText("F",70,540);
-    ctx.fillText("J",120,540);
-    ctx.fillText("K",170,540);
+    ctx.fillText("D",20,canvas.height-10);
+    ctx.fillText("F",70,canvas.height-10);
+    ctx.fillText("J",120,canvas.height-10);
+    ctx.fillText("K",170,canvas.height-10);
     ctx.fillText(pts,10,15);
-    ctx.fillText("按S切换颜色",60,515);
+    ctx.fillText("按S切换颜色",60,canvas.height-35);
+    ctx.fillText("按R重开",140,15);
 }
 function init(){
     blocks=[];
     pts=0;
     end=false;
     pad_color=0;
+    last_press=0;
+    alerted=false;
     for(let c=0;c<blockColumnCount;c++){
         blocks[c]=[];
         for(let r=0;r<blockRowCount;r++){
@@ -55,75 +60,73 @@ function drawBlock(){
             if(blocks[c][r].status==1){
                 let x=c*size;
                 let y=canvas.height-50-(r+1)*size;
-                ctx.beginPath();
-                ctx.rect(x,y,size,size);
                 ctx.fillStyle="#000000";
-                ctx.fill();
-                ctx.closePath();
-                ctx.beginPath();
-                ctx.rect(x+1,y+1,size-2,size-2);
+                ctx.fillRect(x,y,size,size);
                 if(blocks[c][r].color==0)ctx.fillStyle="#0095DD";
                 if(blocks[c][r].color==1)ctx.fillStyle="#FFFFFF";
-                ctx.fill();
-                ctx.closePath();
+                ctx.fillRect(x+1,y+1,size-2,size-2);
             }
         }
     }
 }
 function drawPad(){
-    ctx.beginPath();
-    ctx.rect(0,500,canvas.width,25);
     if(pad_color==0) ctx.fillStyle="#0095DD";
     if(pad_color==1) ctx.fillStyle="#FFFFFF";
-    ctx.fill();
-    ctx.closePath();
+    ctx.fillRect(0,canvas.height-50,canvas.width,25);
 }
 function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     drawBlock();
     drawPad();
     drawText();
-    requestAnimationFrame(draw);
-    if(end){
-        alert("是蓝还是白你给我看清楚喳\n本次得分"+pts);
-        init();
+    if(end){    
+        ctx.fillStyle="rgba(255,0,0,0.5)";
+        ctx.fillRect(last_press*50,20,50,500);
     }
+    requestAnimationFrame(draw);
 }
 document.addEventListener("keydown",keyDownHandler,false);
 function keyDownHandler(e){
-    if(e.key=="d"){
-        if(blocks[0][0].status==0) end=true;
-        else if(blocks[0][0].color!=pad_color) end=true;
-        else{
-            blockFall();
-            pts++;
+    if(!end){
+        if(e.key=="d"){
+            last_press=0;
+            if(blocks[0][0].status==0) end=true;
+            else if(blocks[0][0].color!=pad_color) end=true;
+            if(!end){
+                blockFall();
+                pts++;
+            }
         }
-    }
-    if(e.key=="f"){
-        if(blocks[1][0].status==0) end=true;
-        else if(blocks[1][0].color!=pad_color) end=true;
-        else{
-            blockFall();
-            pts++;
+        if(e.key=="f"){
+            last_press=1;
+            if(blocks[1][0].status==0) end=true;
+            else if(blocks[1][0].color!=pad_color) end=true;
+            if(!end){
+                blockFall();
+                pts++;
+            }
         }
-    }
-    if(e.key=="j"){
-        if(blocks[2][0].status==0) end=true;
-        else if(blocks[2][0].color!=pad_color) end=true;
-        else{
-            blockFall();
-            pts++;
+        if(e.key=="j"){
+            last_press=2;
+            if(blocks[2][0].status==0) end=true;
+            else if(blocks[2][0].color!=pad_color) end=true;
+            if(!end){
+                blockFall();
+                pts++;
+            }
         }
-    }
-    if(e.key=="k"){
-        if(blocks[3][0].status==0) end=true;
-        else if(blocks[3][0].color!=pad_color) end=true;
-        else{
-            blockFall();
-            pts++;
+        if(e.key=="k"){
+            last_press=3;
+            if(blocks[3][0].status==0) end=true;
+            else if(blocks[3][0].color!=pad_color) end=true;
+            if(!end){
+                blockFall();
+                pts++;
+            }
         }
+        if(e.key=="s") pad_color=1-pad_color;
     }
-    if(e.key=="s") pad_color=1-pad_color;
+    if(e.key=="r") init();
 }
 init();
 draw();
