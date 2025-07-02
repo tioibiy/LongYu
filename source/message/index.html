@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>留言板</title>
+  <link rel="stylesheet" href="/css/comment.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <style>
+    /* 可自定义留言板样式 */
+    #draw-canvas { border:1px solid #ccc; margin:10px 0; }
+  </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">留言板</h1>
+      <div id="comment-drawer" class="active" style="position:static;box-shadow:none;">
+        <div class="drawer-content">
+          <div id="comment-box">
+            <input id="nick" placeholder="昵称" maxlength="20">
+            <textarea id="content" placeholder="写下你的留言，支持Markdown..." maxlength="500"></textarea>
+            <input type="file" id="img-upload" accept="image/*">
+            <canvas id="draw-canvas" width="300" height="100"></canvas>
+            <button id="send">发送</button>
+          </div>
+          <div id="comment-list"></div>
+        </div>
+      </div>
+      <div>
+        <h2>实时协作像素画（实验）</h2>
+        <iframe src="https://your-pixel-board-url" width="320" height="320" style="border:1px solid #ccc"></iframe>
+      </div>
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="/js/comment.js"></script>
+  <script>
+    // 简单手绘功能
+    const canvas = document.getElementById('draw-canvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    canvas.onmousedown = e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); };
+    canvas.onmousemove = e => { if(drawing){ ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); }};
+    canvas.onmouseup = () => drawing = false;
+    // 图片上传到 worker R2
+    document.getElementById('img-upload').onchange = async function(e){
+      const file = e.target.files[0];
+      if(file){
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+          const res = await fetch('https://api.long-yu.net/upload-image', { method: 'POST', body: formData });
+          const data = await res.json();
+          if(data.url){
+            document.getElementById('content').value += `\n![图片](${data.url})\n`;
+          } else {
+            alert('图片上传失败');
+          }
+        } catch {
+          alert('图片上传失败');
+        }
+      }
+    };
+    // 发送时附加canvas内容
+    const oldSend = document.getElementById('send').onclick;
+    document.getElementById('send').onclick = function(){
+      if(canvas){
+        const url = canvas.toDataURL();
+        if(url && url.length > 100) document.getElementById('content').value += `\n![手绘](${url})\n`;
+      }
+      if(oldSend) oldSend();
+    };
+  </script>
+</body>
+</html>
